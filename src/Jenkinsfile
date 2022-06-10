@@ -77,6 +77,7 @@ pipeline {
         steps {
             script {
                 sh '''
+rm -rf mydockerfile
 mkdir mydockerfile
 cd mydockerfile
 cp /var/lib/jenkins/workspace/docker_job/target/addressbook.war .
