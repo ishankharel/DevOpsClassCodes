@@ -88,9 +88,9 @@ ADD addressbook.war /usr/local/tomcat/webapps
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 EOT
-sudo chmod 755 /var/run/docker.sock
+chmod 755 /var/run/docker.sock
 docker build -t myimage:$BUILD_NUMBER .
-docker run -itd -P myimage:$BUILD_NUMBER
+docker run -dt -P myimage:$BUILD_NUMBER
 '''
 		
                 
