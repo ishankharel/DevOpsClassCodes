@@ -1,0 +1,77 @@
+pipeline {
+    tools {
+        jdk 'java'
+        maven 'maven'
+    }
+    agent none
+    stages {
+        stage('cloning from github') {
+            agent any
+            steps {
+                script {
+                    echo "HELLO_WORLD"
+                    sh "pwd"
+                    git 'https://github.com/ishankharel/DevOpsClassCodes.git'
+                }
+            }
+        }
+    stage('Code Compile') {
+        agent any
+        steps {
+            script {
+                sh "mvn compile"
+                
+            }
+            echo "This is my 2nd stage"
+        }
+    }
+    stage('Package code') {
+        agent any
+        steps {
+            script {
+                sh "mvn package"
+                
+            }
+            echo "This is my 3rd stage"
+        }
+    }
+    stage('Code Review') {
+        agent any
+        steps {
+            script {
+                sh "mvn pmd:pmd"
+                
+            }
+            echo "This is my 4th stage"
+        }
+    }
+    stage('Test') {
+        agent any
+        steps {
+            script {
+             sh "mvn test"
+               
+            }
+        }
+            post {
+                success {
+                    junit 'target/surefire-reports/*.xml'
+                    
+                }
+            }
+         
+        }
+    stage('MetricCheck'){
+              agent any
+              steps{
+                  sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
+              }
+               post {
+               success {
+	           cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false                  
+               }
+           }		
+          }   
+    
+    }
+}
