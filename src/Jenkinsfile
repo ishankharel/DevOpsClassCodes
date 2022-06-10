@@ -79,7 +79,7 @@ pipeline {
                 sh '''
 mkdir mydockerfile
 cd mydockerfile
-cp /var/lib/jenkins/workspace/Docker Job/target/addressbook.war .
+cp /var/lib/jenkins/workspace/docker_job/target/addressbook.war .
 touch dockerfile
 cat <<EOT>> dockerfile
 From tomcat
