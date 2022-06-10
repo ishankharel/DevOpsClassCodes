@@ -71,7 +71,32 @@ pipeline {
 	           cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false                  
                }
            }		
-          }   
+          }
+    stage('Package code') {
+        agent any
+        steps {
+            script {
+                sh '''
+mkdir mydockerfile
+cd mydockerfile
+cp /var/lib/jenkins/workspace/Docker Job/target/addressbook.war .
+touch dockerfile
+cat <<EOT>> dockerfile
+From tomcat
+ADD addressbook.war /usr/local/tomcat/webapps
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
+EOT
+sudo docker build -t myimage:$BUILD_NUMBER .
+sudo docker run -itd -P myimage:$BUILD_NUMBER
+'''
+		
+                
+            }
+            echo "This is my 3rd stage"
+        }
+    }
+	   
     
     }
 }
