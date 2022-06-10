@@ -5,6 +5,7 @@ pipeline {
     }
     agent none
     stages {
+	    /*
         stage('cloning from github') {
             agent any
             steps {
@@ -71,7 +72,8 @@ pipeline {
 	           cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false                  
                }
            }		
-          }
+          } 
+	  */
     stage('Dockerize') {
         agent any
         steps {
@@ -88,7 +90,6 @@ ADD addressbook.war /usr/local/tomcat/webapps
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 EOT
-chmod 755 /var/run/docker.sock
 docker build -t myimage:$BUILD_NUMBER .
 docker run -dt -P myimage:$BUILD_NUMBER
 '''
